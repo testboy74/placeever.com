@@ -1,0 +1,41 @@
+doctype html
+html
+  head
+    title Best\Worst place ever
+    link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+  body
+    nav.navbar.navbar-default
+      div.container-fluid
+        div.navbar-header
+          button.navbar-toggle.collapse(type="button" data-toggle="collapse" data-target="navhead" area-expanded="false")
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href="#") Placeever.com
+        div.collapse.navbar-collapse#navhead
+          ul.nav.navbar-nav
+            li
+              a(href="#") Новости
+                span.sr-only Current
+            li
+              a(href="#") Рейтинги
+          if !user.isAuth
+            form.navbar-form.navbar-right
+              span Войти:&nbsp;&nbsp;
+              div.form-group#uLogin(data-ulogin="display=panel;theme=classic;fields=first_name,last_name;providers=vkontakte,odnoklassniki,instagram,twitter,facebook,google;hidden=;redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth;mobilebuttons=0;")
+          else
+            div.collapse.navbar-collapse.navbar-right
+              ul.nav.navbar-nav
+                li
+                  a.dropdown-toggle(data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#")= user.name
+                    span.caret
+                    ul.dropdown-menu
+                      li
+                        a(href="/logout") Выйти
+
+    block content
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
+    script(src="/javascripts/bootstrap.min.js")
+    if !user.isAuth
+      script(src="//ulogin.ru/js/ulogin.js")
