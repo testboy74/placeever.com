@@ -3,8 +3,9 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  if(req.cookies.auth) {
-    res.render('index', {user: {name: req.cookies.name, isAuth: true}});
+  var sessData = req.session;
+  if(sessData.anon == 'false') {
+    res.render('index', {user: {name: sessData.name, isAuth: true}});
   } else {
     res.render('index', {user: {isAuth: false}});
   }

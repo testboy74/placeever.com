@@ -4,12 +4,17 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('cookie-session');
 
 var index = require('./routes/index');
 var auth = require('./routes/auth');
 var logout = require('./routes/logout');
 
 var app = express();
+app.use(session({
+    name: 'a3e22',
+    keys: ['anon', 'true']
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

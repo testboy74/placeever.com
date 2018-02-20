@@ -12,16 +12,20 @@ router.post("/", function(req, res, next) {
     });
     conn.connect();
     net.get("http://ulogin.ru/token.php?token="+req.body.token+"&host=http://localhost:3000").then(function(resp) {
-        conn.query("select * from users where uid="+resp.body.uid+";", function(err, rows, fields) {
+        conn.query("select * from users where uid="+resp.body.uid+";", function(err, rows) {
             if(err) throw err
             if(rows.length == 0) {
                 conn.query("insert into users (uid, name) values('" + resp.body.uid + "', '" + resp.body.first_name + " " + resp.body.last_name + "');");
-                res.cookie("name", resp.body.first_name + " " + resp.body.last_name);
-                res.cookie("auth", resp.body.uid);
+                conn.query("select LAST_INSERT_ID();", function(err, rows) {
+                    req.session.id = rows[0];
+                })
+                req.session.anon = 'false';
+                req.session.name = resp.body.first_name + " " + resp.body.last_name;
                 res.redirect('..');
             } else {
-                res.cookie("name", rows[0].name);
-                res.cookie("auth", rows[0].uid);
+                req.session.anon = 'false';
+                req.session.name = rows[0].name;
+                req.session.id = rows[0].id;
                 res.redirect('..');
             }
         });
